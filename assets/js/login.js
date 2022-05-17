@@ -35,7 +35,7 @@ $(function() {
             username: $('.reg-box [name=username]').val(),
             password: $('.reg-box [name=password]').val()
         }
-        $.post('http://www.liulongbin.top:3007/api/reguser', data, function(res) {
+        $.post('/api/reguser', data, function(res) {
             if (res.status != 0)
                 return layout.msg(res.message)
 
@@ -54,10 +54,17 @@ $(function() {
         //阻止默认提交行为
         e.preventDefault()
         $.ajax({
+            url: '/api/login',
             method: 'post',
             data: $(this).serialize(),
             success: function(res) {
+                if (res.status != 0)
+                    return layout.msg(res.message)
 
+                layout.msg('登录成功！')
+                    //将登录成功的token保存出来
+                localStorage.setItem('token', res.token)
+                location.href = '/index.html'
             }
 
         })
