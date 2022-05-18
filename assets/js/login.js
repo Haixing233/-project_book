@@ -13,8 +13,10 @@ $(function() {
     let form = layui.form
     let layout = layui.layer
 
+
     form.verify({
-        pwd: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'],
+
+        'pwd': [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'],
         // 形参是repassword的值
         repwd: function(value) {
             // 获取密码框的值
@@ -56,13 +58,18 @@ $(function() {
         $.ajax({
             url: '/api/login',
             method: 'post',
-            data: $(this).serialize(),
+            data: {
+                username: $('.login-box [name=username]').val(),
+                password: $('.login-box [name=password]').val()
+            },
             success: function(res) {
-                if (res.status != 0)
-                    return layout.msg(res.message)
+                if (res.status != 0) {
 
+                    return layout.msg(res.message)
+                }
+                console.log(res.data)
                 layout.msg('登录成功！')
-                    //将登录成功的token保存出来
+                    // 将登录成功的token保存出来
                 localStorage.setItem('token', res.token)
                 location.href = '/index.html'
             }
